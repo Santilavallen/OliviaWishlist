@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.7">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px 'Helvetica Neue'}
+    span.s1 {font: 12.0px Helvetica}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="es"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Mi Lista Colaborativa&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card-disabled {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>filter: grayscale(1);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>opacity: 0.7;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>pointer-events: none; /* Evita clicks en el link */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.admin-controls { pointer-events: auto !important; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body class="bg-gray-50 text-gray-800 font-sans"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Header --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;header class="bg-white shadow-sm py-6 mb-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="max-w-6xl mx-auto px-4 flex justify-between items-center"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h1 class="text-2xl font-bold text-gray-900"&gt;Lista de Deseos&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button id="adminBtn" onclick="toggleAdminMode()" class="px-4 py-2 text-sm bg-gray-200 rounded-full hover:bg-gray-300 transition"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>Modo Admin: OFF</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/header&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Main Content --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;main class="max-w-6xl mx-auto px-4 mb-12"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="loading" class="text-center text-gray-500 text-lg"&gt;Cargando elementos...&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="cardsContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- Las cards se inyectarán aquí mediante JavaScript --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/main&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>// REPLAZA CON LA URL DE TU SCRIPT DE GOOGLE (Paso 3)</p>
+<p class="p3"><span class="s1"><span class="Apple-converted-space">        </span>const WEB_APP_URL = "</span>https://script.google.com/macros/s/AKfycbyIXj_HKVA3vPdx0HZFLfXWzGFGtSoft5f8DDBdCC9rN1WP5H-XsIDjW9_Sjexuck-B/exec<span class="s1">";<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>let itemsData = [];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let isAdmin = false;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function toggleAdminMode() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>isAdmin = !isAdmin;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('adminBtn').innerText = `Modo Admin: ${isAdmin ? 'ON' : 'OFF'}`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('adminBtn').classList.toggle('bg-green-200', isAdmin);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>renderCards();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>async function fetchData() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const response = await fetch(`${WEB_APP_URL}?action=read`);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>itemsData = await response.json();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('loading').classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('cardsContainer').classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>renderCards();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} catch (error) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>console.error("Error al cargar los datos:", error);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('loading').innerText = "Error al cargar los datos. Verifica la configuración.";</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function renderCards() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const container = document.getElementById('cardsContainer');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>container.innerHTML = '';</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Ordenar: Primero los NO comprados, luego los COMPRADOS (enviados al fondo)</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const sortedItems = [...itemsData].sort((a, b) =&gt; a.comprado - b.comprado);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>sortedItems.forEach(item =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const isComprado = item.comprado === true || item.comprado === "TRUE";</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>const card = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>card.className = `bg-white rounded-2xl shadow-md overflow-hidden flex flex-col justify-between transition transform hover:-translate-y-1 ${isComprado ? 'card-disabled' : ''}`;</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Si está comprado pero es admin, permitimos interactuar con los botones de control</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (isComprado &amp;&amp; isAdmin) card.classList.add('admin-controls');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>card.innerHTML = `</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="cursor-pointer" onclick="${isComprado ? '' : `window.open('${item.link}', '_blank')`}"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;img src="${item.imagen_url || 'https://via.placeholder.com/300x200'}" alt="${item.titulo}" class="w-full h-48 object-cover"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="p-5"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;h3 class="text-lg font-semibold text-gray-900 mb-2"&gt;${item.titulo}&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p class="text-gray-600 text-sm line-clamp-3"&gt;${item.descripcion}&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="p-5 pt-0 mt-auto"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>${isComprado ? `</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="bg-gray-100 p-3 rounded-xl text-center"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;p class="text-sm text-gray-500 font-medium"&gt;Comprado por: &lt;span class="text-gray-800 font-bold"&gt;${item.comprador}&lt;/span&gt;&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>${isAdmin ? `</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;button onclick="unlockItem(${item.id})" class="mt-2 text-xs text-red-600 underline font-semibold pointer-events-auto"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>Desbloquear (Admin)</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>` : ''}</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>` : `</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;button onclick="markAsBought(${item.id})" class="w-full py-2.5 bg-neutral-900 text-white font-medium text-sm rounded-xl hover:bg-neutral-800 transition"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>Marcar como comprado</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>`}</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>container.appendChild(card);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>async function markAsBought(id) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const name = prompt("Por favor, ingresa tu nombre para reservarlo:");</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!name || name.trim() === "") return;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Optimistic UI update (actualiza en pantalla inmediatamente)</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const item = itemsData.find(i =&gt; i.id == id);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (item) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>item.comprado = true;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>item.comprador = name;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>renderCards();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Enviar a la base de datos (Google Sheets)</p>
+<p class="p1"><span class="Apple-converted-space">            </span>await fetch(`${WEB_APP_URL}`, {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>method: 'POST',</p>
+<p class="p1"><span class="Apple-converted-space">                </span>mode: 'no-cors',</p>
+<p class="p1"><span class="Apple-converted-space">                </span>headers: { 'Content-Type': 'application/json' },</p>
+<p class="p1"><span class="Apple-converted-space">                </span>body: JSON.stringify({ action: 'update', id: id, comprado: true, comprador: name })</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Recargamos para asegurar sincronía</p>
+<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(fetchData, 1500);<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>async function unlockItem(id) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!confirm("¿Estás seguro de que quieres desbloquear esta card?")) return;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const item = itemsData.find(i =&gt; i.id == id);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (item) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>item.comprado = false;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>item.comprador = "";</p>
+<p class="p1"><span class="Apple-converted-space">                </span>renderCards();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>await fetch(`${WEB_APP_URL}`, {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>method: 'POST',</p>
+<p class="p1"><span class="Apple-converted-space">                </span>mode: 'no-cors',</p>
+<p class="p1"><span class="Apple-converted-space">                </span>headers: { 'Content-Type': 'application/json' },</p>
+<p class="p1"><span class="Apple-converted-space">                </span>body: JSON.stringify({ action: 'update', id: id, comprado: false, comprador: "" })</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(fetchData, 1500);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Inicializar</p>
+<p class="p1"><span class="Apple-converted-space">        </span>fetchData();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
