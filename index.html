@@ -30,7 +30,7 @@
                     <div>
                         <h4 class="text-amber-800 font-bold text-sm mb-1">Aviso importante para invitados</h4>
                         <p class="text-amber-700 text-sm leading-relaxed font-medium">
-                            Por favor, antes de concretar la compra externa de cualquier producto, asegurate de que nadie más lo haya reservado en esta página revisando que el botón no figure como <span class="font-bold">"Comprado"</span>.
+                            Por favor, antes de concretar la compra externa de cualquier product, asegurate de que nadie más lo haya reservado en esta página revisando que el botón no figure como <span class="font-bold">"Comprado"</span>.
                         </p>
                     </div>
                 </div>
@@ -140,16 +140,17 @@
                 const card = document.createElement('div');
                 card.className = `bg-white border border-gray-100 rounded-[28px] shadow-sm p-6 flex flex-col justify-between transition-all duration-300 ${isComprado ? 'card-disabled shadow-none' : 'hover:shadow-md'}`;
 
+                // MODIFICACIÓN: Reducción de gap general a gap-y-2 para acercar título, variación y precio
                 card.innerHTML = `
-                    <div class="cursor-pointer flex flex-col gap-y-4" onclick="${isComprado ? '' : `window.open('${item.link}', '_blank')`}">
+                    <div class="cursor-pointer flex flex-col gap-y-2" onclick="${isComprado ? '' : `window.open('${item.link}', '_blank')`}">
                         
-                        <div class="relative w-full h-64 bg-gray-50 rounded-2xl overflow-hidden flex items-center justify-center">
+                        <div class="relative w-full h-64 bg-gray-50 rounded-2xl overflow-hidden flex items-center justify-center mb-2">
                             <img src="${item.imagen_url || 'https://via.placeholder.com/300x250'}" alt="${item.titulo}" class="w-full h-full object-cover">
                             
                             ${esPrimeraNecesidad ? `
-                                <div class="absolute top-4 left-4 inline-flex items-center gap-1.5 bg-[#e9f0e8]/90 backdrop-blur-sm text-[#557351] px-3 py-1 rounded-full text-sm font-semibold shadow-sm select-none">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                                    primera necesidad
+                                <div class="absolute top-2 left-2 inline-flex items-center gap-1.5 bg-[#e9f0e8]/90 backdrop-blur-sm text-[#557351] px-3 py-1 rounded-full text-xs font-semibold shadow-sm select-none">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                                    Indispensable
                                 </div>
                             ` : ''}
                         </div>
@@ -159,10 +160,10 @@
                             ${item.variante ? `<p class="text-gray-500 text-lg font-normal leading-snug">${item.variante}</p>` : ''}
                         </div>
 
-                        ${item.precio ? `<div class="text-xl font-bold text-gray-900 tracking-tight">${formatPrice(item.precio)}</div>` : ''}
+                        ${item.precio ? `<div class="text-xl font-bold text-gray-900 tracking-tight pt-1">${formatPrice(item.precio)}</div>` : ''}
                     </div>
                     
-                    <div class="mt-6">
+                    <div class="mt-3">
                         ${isComprado ? `
                             <div class="bg-gray-50 border border-gray-200 p-4 rounded-2xl text-center">
                                 <p class="text-sm text-gray-500 font-medium">Comprado por: <span class="text-gray-900 font-bold text-base">${item.comprador || 'Anónimo'}</span></p>
