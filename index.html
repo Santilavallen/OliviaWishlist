@@ -11,7 +11,6 @@
             opacity: 0.65;
             pointer-events: none;
         }
-        .admin-controls { pointer-events: auto !important; }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-900 font-sans antialiased">
@@ -19,9 +18,6 @@
     <header class="bg-white shadow-sm py-6 mb-10">
         <div class="max-w-6xl mx-auto px-6 flex justify-between items-center">
             <h1 class="text-2xl font-bold tracking-tight text-gray-900">Lista de Deseos de Olivia</h1>
-            <button id="adminBtn" onclick="toggleAdminMode()" class="px-5 py-2 text-sm font-medium bg-gray-200 rounded-full hover:bg-gray-300 transition-all">
-                Modo Admin: OFF
-            </button>
         </div>
     </header>
 
@@ -32,29 +28,20 @@
     </main>
 
     <script>
-        // URL de tu nueva implementación vinculada directamente
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyIXj_HKVA3vPdx0HZFLfXWzGFGtSoft5f8DDBdCC9rN1WP5H-XsIDjW9_Sjexuck-B/exec"; 
         
         let itemsData = [];
-        let isAdmin = false;
-
-        function toggleAdminMode() {
-            isAdmin = !isAdmin;
-            document.getElementById('adminBtn').innerText = `Modo Admin: ${isAdmin ? 'ON' : 'OFF'}`;
-            document.getElementById('adminBtn').classList.toggle('bg-green-200', isAdmin);
-            renderCards();
-        }
 
         async function fetchData() {
             try {
-                const response = await fetch(`${WEB_APP_URL}?action=read`);
+                const response = await fetch(WEB_APP_URL);
                 itemsData = await response.json();
                 document.getElementById('loading').classList.add('hidden');
                 document.getElementById('cardsContainer').classList.remove('hidden');
                 renderCards();
             } catch (error) {
                 console.error("Error al cargar los datos:", error);
-                document.getElementById('loading').innerText = "Error al conectar con la lista de Google Sheets.";
+                document.getElementById('loading').innerText = "Error al conectar con la lista de Google Sheets. Recordá verificar que la planilla esté compartida como pública (Cualquiera con el enlace).";
             }
         }
 
@@ -70,9 +57,75 @@
             });
 
             sortedItems.forEach(item => {
+                if (!item.titulo || item.titulo.toString().trim() === "") return;
+
                 const isComprado = item.comprado === true || item.comprado === "TRUE";
-                const esPrimeraNecesidad = item.primera_necesidad === "SI" || item.primera_necesidad === "si" || item.primera_necesidad === true;
+                const esPrimeraNecesidad = item.primera_necesidad === "SI" || item.primera_necesidad === "si" || item.primera_necesidad === true || item.primera_necesidad === "TRUE";
                 
                 const card = document.createElement('div');
-                // Diseño idéntico a tu mockup con bordes muy redondeados
-                card.className = `bg-white border border-gray-100 rounded-[28px] shadow
+                card.className = `bg-white border border-gray-100 rounded-[28px] shadow-sm p-6 flex flex-col justify-between transition-all duration-300 ${isComprado ? 'card-disabled shadow-none' : 'hover:shadow-md'}`;
+
+                card.innerHTML = `
+                    <div class="cursor-pointer flex flex-col" onclick="${isComprado ? '' : `window.open('${item.link}', '_blank')`}">
+                        
+                        <div class="mb-4">
+                            <h3 class="text-[26px] font-bold text-gray-900 leading-tight tracking-tight mb-1">${item.titulo}</h3>
+                            ${item.variante ? `<p class="text-gray-500 text-lg font-normal mb-3">${item.variante}</p>` : ''}
+                            
+                            ${esPrimeraNecesidad ? `
+                                <div class="inline-flex items-center gap-1.5 bg-[#e9f0e8] text-[#557351] px-3 py-1 rounded-full text-sm font-medium">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                                    primera necesidad
+                                </div>
+                            ` : ''}
+                        </div>
+
+                        <div class="w-full h-64 bg-gray-50 rounded-2xl overflow-hidden mb-6 flex items-center justify-center">
+                            <img src="${item.imagen_url || 'https://via.placeholder.com/300x250'}" alt="${item.titulo}" class="w-full h-full object-cover">
+                        </div>
+
+                        ${item.precio ? `<div class="text-[32px] font-bold text-gray-900 tracking-tight mb-4">${item.precio}</div>` : ''}
+                    </div>
+                    
+                    <div class="mt-auto">
+                        ${isComprado ? `
+                            <div class="bg-gray-50 border border-gray-200 p-4 rounded-2xl text-center">
+                                <p class="text-sm text-gray-500 font-medium">Comprado por: <span class="text-gray-900 font-bold text-base">${item.comprador || 'Anónimo'}</span></p>
+                            </div>
+                        ` : `
+                            <button onclick="markAsBought(${item.id})" class="w-full py-3.5 bg-[#60805c] hover:bg-[#4f6b4c] text-white font-medium text-base rounded-2xl transition-colors flex items-center justify-center gap-2 shadow-sm shadow-[#60805c]/20">
+                                <svg class="w-5 h-5 stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                Marcar como comprado
+                            </button>
+                        `}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        async function markAsBought(id) {
+            const name = prompt("Por favor, ingresa tu nombre para reservarlo:");
+            if (!name || name.trim() === "") return;
+
+            const item = itemsData.find(i => i.id == id);
+            if (item) {
+                item.comprado = true;
+                item.comprador = name;
+                renderCards();
+            }
+
+            await fetch(`${WEB_APP_URL}`, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'update', id: id, comprado: true, comprador: name })
+            });
+            
+            setTimeout(fetchData, 1500); 
+        }
+
+        fetchData();
+    </script>
+</body>
+</html>
