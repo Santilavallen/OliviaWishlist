@@ -45,17 +45,34 @@
             }
         }
 
+        // CORRECCIÓN: Función de formateo mejorada para manejar decimales con coma
         function formatPrice(priceVal) {
             if (!priceVal) return '';
-            let cleanVal = priceVal.toString().replace(/[\$\.\s]/g, '').trim();
-            if (!isNaN(cleanVal) && cleanVal !== '') {
-                const number = parseFloat(cleanVal);
-                return '$ ' + number.toLocaleString('es-AR');
+            
+            let strVal = priceVal.toString().trim();
+            
+            // Si ya viene formateado con signo $ y puntos/comas, limpiamos con cuidado
+            // Quitamos el signo $, espacios y los puntos de miles
+            let cleanVal = strVal.replace(/[\$\s]/g, '').replace(/\./g, '');
+            
+            // Reemplazamos la coma decimal por un punto para que JavaScript lo entienda como float
+            cleanVal = cleanVal.replace(',', '.');
+            
+            const number = parseFloat(cleanVal);
+            
+            // Si es un número válido, lo formateamos con formato AR (mínimo y máximo 2 decimales si los tiene)
+            if (!isNaN(number)) {
+                return '$ ' + number.toLocaleString('es-AR', {
+                    minimumFractionDigits: strVal.includes(',') ? 2 : 0,
+                    maximumFractionDigits: 2
+                });
             }
-            if (!priceVal.toString().startsWith('$')) {
-                return '$ ' + priceVal;
+            
+            // Si falla por algo raro, añadimos el signo $ al string original si no lo tenía
+            if (!strVal.startsWith('$')) {
+                return '$ ' + strVal;
             }
-            return priceVal;
+            return strVal;
         }
 
         function renderCards() {
