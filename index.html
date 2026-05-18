@@ -17,20 +17,44 @@
 
     <header class="bg-white shadow-sm py-10 mb-10">
         <div class="max-w-6xl mx-auto px-6">
-            <h1 class="text-5xl font-black tracking-tight text-[#60805c] mb-6 text-center sm:text-left">
+            <h1 class="text-5xl font-black tracking-tight text-[#60805c] mb-8 text-center sm:text-left">
                 Wishlist Olivia
             </h1>
             
-            <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-start gap-3 max-w-3xl mx-auto sm:mx-0">
-                <svg class="w-6 h-6 text-amber-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                </svg>
-                <div>
-                    <h4 class="text-amber-800 font-bold text-sm mb-0.5">Aviso importante para invitados</h4>
-                    <p class="text-amber-700 text-sm leading-relaxed font-medium">
-                        Por favor, antes de concretar la compra externa de cualquier producto, asegurate de que nadie más lo haya reservado en esta página revisando que el botón no figure como <span class="font-bold">"Comprado"</span>.
-                    </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
+                
+                <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 flex items-start gap-3 h-full">
+                    <svg class="w-6 h-6 text-amber-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                    <div>
+                        <h4 class="text-amber-800 font-bold text-sm mb-1">Aviso importante para invitados</h4>
+                        <p class="text-amber-700 text-sm leading-relaxed font-medium">
+                            Por favor, antes de concretar la compra externa de cualquier producto, asegurate de que nadie más lo haya reservado en esta página revisando que el botón no figure como <span class="font-bold">"Comprado"</span>.
+                        </p>
+                    </div>
                 </div>
+
+                <div class="bg-gray-50 border border-gray-200 rounded-2xl p-5 flex items-start justify-between gap-4 h-full">
+                    <div class="flex items-start gap-3">
+                        <svg class="w-6 h-6 text-gray-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        <div>
+                            <h4 class="text-gray-800 font-bold text-sm mb-1">¿Querés enviarlo directamente?</h4>
+                            <p id="addressText" class="text-gray-600 text-sm leading-relaxed font-medium">
+                                Blas Parera 2909, 1A, Olivos - CP:1636
+                            </p>
+                        </div>
+                    </div>
+                    <button onclick="copyAddress()" id="copyBtn" class="flex-shrink-0 p-2 bg-white border border-gray-200 rounded-xl hover:bg-gray-100 text-gray-500 transition-all shadow-sm" title="Copiar dirección">
+                        <svg id="copyIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                        </svg>
+                    </button>
+                </div>
+
             </div>
         </div>
     </header>
@@ -57,6 +81,22 @@
                 console.error("Error al cargar los datos:", error);
                 document.getElementById('loading').innerText = "Error al conectar con la lista de Google Sheets. Recordá verificar que la planilla esté compartida como pública (Cualquiera con el enlace).";
             }
+        }
+
+        function copyAddress() {
+            const textToCopy = document.getElementById('addressText').innerText;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const btn = document.getElementById('copyBtn');
+                const icon = document.getElementById('copyIcon');
+                
+                btn.classList.add('bg-green-50', 'border-green-300', 'text-green-600');
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>';
+                
+                setTimeout(() => {
+                    btn.classList.remove('bg-green-50', 'border-green-300', 'text-green-600');
+                    icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>';
+                }, 2000);
+            });
         }
 
         function formatPrice(priceVal) {
@@ -100,10 +140,11 @@
                 const card = document.createElement('div');
                 card.className = `bg-white border border-gray-100 rounded-[28px] shadow-sm p-6 flex flex-col justify-between transition-all duration-300 ${isComprado ? 'card-disabled shadow-none' : 'hover:shadow-md'}`;
 
+                // MODIFICACIÓN: Uso de flex y gap-y-4 para que el margen superior a la imagen sea idéntico en todas las tarjetas
                 card.innerHTML = `
-                    <div class="cursor-pointer flex flex-col" onclick="${isComprado ? '' : `window.open('${item.link}', '_blank')`}">
+                    <div class="cursor-pointer flex flex-col gap-y-4" onclick="${isComprado ? '' : `window.open('${item.link}', '_blank')`}">
                         
-                        <div class="mb-4">
+                        <div>
                             ${esPrimeraNecesidad ? `
                                 <div class="inline-flex items-center gap-1.5 bg-[#e9f0e8] text-[#557351] px-3 py-1 rounded-full text-sm font-medium mb-2.5">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
@@ -113,17 +154,17 @@
                             ` : ''}
                             
                             <h3 class="text-[26px] font-bold text-gray-900 leading-tight tracking-tight mb-1">${item.titulo}</h3>
-                            ${item.variante ? `<p class="text-gray-500 text-lg font-normal mb-3">${item.variante}</p>` : ''}
+                            ${item.variante ? `<p class="text-gray-500 text-lg font-normal">${item.variante}</p>` : ''}
                         </div>
 
-                        <div class="w-full h-64 bg-gray-50 rounded-2xl overflow-hidden mb-6 flex items-center justify-center">
+                        <div class="w-full h-64 bg-gray-50 rounded-2xl overflow-hidden flex items-center justify-center">
                             <img src="${item.imagen_url || 'https://via.placeholder.com/300x250'}" alt="${item.titulo}" class="w-full h-full object-cover">
                         </div>
 
-                        ${item.precio ? `<div class="text-2xl font-bold text-gray-900 tracking-tight mb-4">${formatPrice(item.precio)}</div>` : ''}
+                        ${item.precio ? `<div class="text-xl font-bold text-gray-900 tracking-tight">${formatPrice(item.precio)}</div>` : ''}
                     </div>
                     
-                    <div class="mt-auto">
+                    <div class="mt-6">
                         ${isComprado ? `
                             <div class="bg-gray-50 border border-gray-200 p-4 rounded-2xl text-center">
                                 <p class="text-sm text-gray-500 font-medium">Comprado por: <span class="text-gray-900 font-bold text-base">${item.comprador || 'Anónimo'}</span></p>
