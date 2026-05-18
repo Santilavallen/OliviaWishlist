@@ -44,7 +44,7 @@
                         <div>
                             <h4 class="text-gray-800 font-bold text-sm mb-1">¿Querés enviarlo directamente?</h4>
                             <p id="addressText" class="text-gray-600 text-sm leading-relaxed font-medium">
-                                De lunes a jueves lo podes enviar a Blas Parera 2909, 1A, Olivos - CP:1636
+                                Blas Parera 2909, 1A, Olivos - CP:1636
                             </p>
                         </div>
                     </div>
@@ -140,27 +140,23 @@
                 const card = document.createElement('div');
                 card.className = `bg-white border border-gray-100 rounded-[28px] shadow-sm p-6 flex flex-col justify-between transition-all duration-300 ${isComprado ? 'card-disabled shadow-none' : 'hover:shadow-md'}`;
 
-                // MODIFICACIÓN: Nuevo orden de componentes dentro de la tarjeta
                 card.innerHTML = `
                     <div class="cursor-pointer flex flex-col gap-y-4" onclick="${isComprado ? '' : `window.open('${item.link}', '_blank')`}">
                         
-                        <div class="w-full h-64 bg-gray-50 rounded-2xl overflow-hidden flex items-center justify-center">
+                        <div class="relative w-full h-64 bg-gray-50 rounded-2xl overflow-hidden flex items-center justify-center">
                             <img src="${item.imagen_url || 'https://via.placeholder.com/300x250'}" alt="${item.titulo}" class="w-full h-full object-cover">
-                        </div>
-
-                        <h3 class="text-[26px] font-bold text-gray-900 leading-tight tracking-tight">${item.titulo}</h3>
-                        
-                        <div class="flex flex-col gap-y-2.5">
-                            ${item.variante ? `<p class="text-gray-500 text-lg font-normal">${item.variante}</p>` : ''}
                             
                             ${esPrimeraNecesidad ? `
-                                <div>
-                                    <div class="inline-flex items-center gap-1.5 bg-[#e9f0e8] text-[#557351] px-3 py-1 rounded-full text-sm font-medium">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                                        primera necesidad
-                                    </div>
+                                <div class="absolute top-4 left-4 inline-flex items-center gap-1.5 bg-[#e9f0e8]/90 backdrop-blur-sm text-[#557351] px-3 py-1 rounded-full text-sm font-semibold shadow-sm select-none">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                                    primera necesidad
                                 </div>
                             ` : ''}
+                        </div>
+
+                        <div>
+                            <h3 class="text-[26px] font-bold text-gray-900 leading-tight tracking-tight mb-0.5">${item.titulo}</h3>
+                            ${item.variante ? `<p class="text-gray-500 text-lg font-normal leading-snug">${item.variante}</p>` : ''}
                         </div>
 
                         ${item.precio ? `<div class="text-xl font-bold text-gray-900 tracking-tight">${formatPrice(item.precio)}</div>` : ''}
