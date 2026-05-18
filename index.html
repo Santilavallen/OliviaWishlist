@@ -161,7 +161,7 @@
                             ${item.variante ? `<p class="text-gray-500 text-lg font-normal leading-snug">${item.variante}</p>` : ''}
                         </div>
 
-                        ${item.precio ? `<div class="text-xl font-bold text-gray-900 tracking-tight pt-1">${formatPrice(item.precio)}</div>` : ''}
+                        ${(item.precio && !isComprado) ? `<div class="text-xl font-bold text-gray-900 tracking-tight pt-1">${formatPrice(item.precio)}</div>` : ''}
                     </div>
                     
                     <div class="mt-3">
