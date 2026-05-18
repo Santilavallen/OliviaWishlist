@@ -30,7 +30,7 @@
                     <div>
                         <h4 class="text-amber-800 font-bold text-sm mb-1">Aviso importante para invitados</h4>
                         <p class="text-amber-700 text-sm leading-relaxed font-medium">
-                            Por favor, antes de concretar la compra externa de cualquier product, asegurate de que nadie más lo haya reservado en esta página revisando que el botón no figure como <span class="font-bold">"Comprado"</span>.
+                            Por favor, antes de concretar la compra externa de cualquier producto, asegurate de que nadie más lo haya reservado en esta página revisando que el botón no figure como <span class="font-bold">"Comprado"</span>.
                         </p>
                     </div>
                 </div>
@@ -62,7 +62,7 @@
     <main class="max-w-6xl mx-auto px-6 mb-16">
         <div id="loading" class="text-center text-gray-500 text-lg font-medium">Cargando elementos...</div>
         <div id="cardsContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 hidden">
-            </div>
+        </div>
     </main>
 
     <script>
@@ -140,7 +140,6 @@
                 const card = document.createElement('div');
                 card.className = `bg-white border border-gray-100 rounded-[28px] shadow-sm p-6 flex flex-col justify-between transition-all duration-300 ${isComprado ? 'card-disabled shadow-none' : 'hover:shadow-md'}`;
 
-                // MODIFICACIÓN: Reducción de gap general a gap-y-2 para acercar título, variación y precio
                 card.innerHTML = `
                     <div class="cursor-pointer flex flex-col gap-y-2" onclick="${isComprado ? '' : `window.open('${item.link}', '_blank')`}">
                         
@@ -149,7 +148,9 @@
                             
                             ${esPrimeraNecesidad ? `
                                 <div class="absolute top-2 left-2 inline-flex items-center gap-1.5 bg-[#e9f0e8]/90 backdrop-blur-sm text-[#557351] px-3 py-1 rounded-full text-xs font-semibold shadow-sm select-none">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                                    <svg class="w-3.5 h-3.5 fill-none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                    </svg>
                                     Indispensable
                                 </div>
                             ` : ''}
