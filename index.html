@@ -4,8 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wishlist Olivia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
         .card-disabled {
             filter: grayscale(0.4);
             opacity: 0.65;
@@ -13,11 +19,11 @@
         }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-900 font-sans antialiased">
+<body class="bg-gray-100 text-[#111827] antialiased">
 
     <header class="bg-white shadow-sm py-10 mb-10">
         <div class="max-w-6xl mx-auto px-6">
-            <h1 class="text-5xl font-black tracking-tight text-[#60805c] mb-8 text-center sm:text-left">
+            <h1 class="text-5xl font-black tracking-tight text-[#4F7A5C] mb-8 text-center sm:text-left">
                 Wishlist Olivia
             </h1>
             
@@ -138,40 +144,45 @@
                 const esPrimeraNecesidad = item.primera_necesidad === "SI" || item.primera_necesidad === "si" || item.primera_necesidad === true || item.primera_necesidad === "TRUE";
                 
                 const card = document.createElement('div');
-                card.className = `bg-white border border-gray-100 rounded-[28px] shadow-sm p-6 flex flex-col justify-between transition-all duration-300 ${isComprado ? 'card-disabled shadow-none' : 'hover:shadow-md'}`;
+                // Anatomía: max-width 320px, padding interno de 16px (p-4), bordes redondeados y diseño equilibrado
+                card.className = `w-full max-w-[320px] mx-auto bg-white border border-[#E6E9EE] rounded-[24px] shadow-sm p-4 flex flex-col justify-between transition-all duration-300 ${isComprado ? 'card-disabled shadow-none' : 'hover:shadow-md'}`;
 
                 card.innerHTML = `
-                    <div class="cursor-pointer flex flex-col gap-y-2" onclick="${isComprado ? '' : `window.open('${item.link}', '_blank')`}">
+                    <div class="cursor-pointer flex flex-col" onclick="${isComprado ? '' : `window.open('${item.link}', '_blank')`}">
                         
-                        <div class="relative w-full h-64 bg-gray-50 rounded-2xl overflow-hidden flex items-center justify-center mb-2">
+                        <div class="relative w-full h-[208px] bg-gray-50 rounded-2xl overflow-hidden flex items-center justify-center mb-4">
                             <img src="${item.imagen_url || 'https://via.placeholder.com/300x250'}" alt="${item.titulo}" class="w-full h-full object-cover">
                             
                             ${esPrimeraNecesidad ? `
-                                <div class="absolute top-2 left-2 inline-flex items-center gap-1.5 bg-[#e9f0e8]/90 backdrop-blur-sm text-[#557351] px-3 py-1 rounded-full text-xs font-semibold shadow-sm select-none">
-                                    <svg class="w-3.5 h-3.5 fill-none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <div class="absolute top-2 left-2 h-[28px] inline-flex items-center gap-1.5 bg-[#E8F2EA] text-[#2E7D32] px-3 rounded-full text-[14px] font-medium shadow-sm select-none">
+                                    <svg class="w-4 h-4 fill-none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                                     </svg>
-                                    Indispensable
+                                    <span>Indispensable</span>
                                 </div>
                             ` : ''}
                         </div>
 
-                        <div>
-                            <h3 class="text-[26px] font-bold text-gray-800 leading-tight tracking-tight mb-0.5">${item.titulo}</h3>
-                            ${item.variante ? `<p class="text-gray-500 text-lg font-normal leading-snug">${item.variante}</p>` : ''}
+                        <div class="flex flex-col mb-2">
+                            <h3 class="text-[20px] font-semibold text-[#111827] leading-[28px] tracking-tight">${item.titulo}</h3>
+                            ${item.variante ? `<p class="text-gray-500 text-[14px] font-normal leading-snug mt-0.5 mb-1">${item.variante}</p>` : ''}
                         </div>
 
-                        ${(item.precio && !isComprado) ? `<div class="text-xl font-bold text-gray-900 tracking-tight pt-1">${formatPrice(item.precio)}</div>` : ''}
+                        ${(item.precio && !isComprado) ? `
+                            <div class="w-full h-[44px] bg-[#F1F5F2] rounded-xl flex items-center px-4 mb-3">
+                                <span class="text-[18px] font-semibold text-[#111827] tracking-tight">${formatPrice(item.precio)}</span>
+                            </div>
+                        ` : ''}
                     </div>
                     
-                    <div class="mt-3">
+                    <div class="w-full">
                         ${isComprado ? `
-                            <div class="bg-gray-50 border border-gray-200 p-4 rounded-2xl text-center">
-                                <p class="text-sm text-gray-500 font-medium">Comprado por: <span class="text-gray-900 font-bold text-base">${item.comprador || 'Anónimo'}</span></p>
+                            <div class="bg-gray-50 border border-gray-200 h-[48px] flex items-center justify-center rounded-xl text-center px-4">
+                                <p class="text-sm text-gray-500 font-medium truncate">Comprado por: <span class="text-[#111827] font-bold">${item.comprador || 'Anónimo'}</span></p>
                             </div>
                         ` : `
-                            <button onclick="markAsBought(${item.id})" class="w-full py-3.5 bg-[#60805c] hover:bg-[#4f6b4c] text-white font-medium text-base rounded-2xl transition-colors flex items-center justify-center gap-2 shadow-sm shadow-[#60805c]/20">
-                                <svg class="w-5 h-5 stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <button onclick="markAsBought(${item.id})" class="w-full h-[48px] bg-[#4F7A5C] hover:bg-[#3d5e46] text-white font-medium text-[16px] px-5 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm shadow-[#4F7A5C]/10">
+                                <svg class="w-4 h-4 stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                                 Marcar como comprado
                             </button>
                         `}
