@@ -144,7 +144,6 @@
                 const esPrimeraNecesidad = item.primera_necesidad === "SI" || item.primera_necesidad === "si" || item.primera_necesidad === true || item.primera_necesidad === "TRUE";
                 
                 const card = document.createElement('div');
-                // MODIFICACIÓN: Se añade min-h-[440px] para asegurar una base homogénea y flex flex-col para controlar el empuje
                 card.className = `w-full max-w-[320px] min-h-[440px] mx-auto bg-white border border-[#E6E9EE] rounded-[24px] shadow-sm p-4 flex flex-col justify-between transition-all duration-300 ${isComprado ? 'card-disabled shadow-none' : 'hover:shadow-md'}`;
 
                 card.innerHTML = `
@@ -183,7 +182,7 @@
                                 <p class="text-sm text-gray-500 font-medium truncate">Comprado por: <span class="text-[#111827] font-bold">${item.comprador || 'Anónimo'}</span></p>
                             </div>
                         ` : `
-                            <button onclick="markAsBought(${item.id})" class="w-full h-[48px] bg-[#4F7A5C] hover:bg-[#3d5e46] text-white font-medium text-[16px] px-5 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm shadow-[#4F7A5C]/10">
+                            <button onclick="event.stopPropagation(); markAsBought(${item.id})" class="w-full h-[48px] bg-[#4F7A5C] hover:bg-[#3d5e46] text-white font-medium text-[16px] px-5 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm shadow-[#4F7A5C]/10">
                                 <svg class="w-4 h-4 stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                                 Marcar como comprado
                             </button>
@@ -198,23 +197,28 @@
             const name = prompt("Por favor, ingresa tu nombre para reservarlo:");
             if (!name || name.trim() === "") return;
 
+            // Buscamos el item numérico o string de forma segura
             const item = itemsData.find(i => i.id == id);
             if (item) {
                 item.comprado = true;
-                item.comprador = name;
-                renderCards();
+                item.comprador = name.trim();
+                renderCards(); // Re-render inmediato local para feedback visual óptimo
             }
 
             try {
                 await fetch(WEB_APP_URL, {
                     method: 'POST',
                     mode: 'no-cors',
-                    body: JSON.stringify({ action: 'update', id: id, comprado: true, comprador: name })
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ action: 'update', id: id, comprado: true, comprador: name.trim() })
                 });
             } catch (err) {
                 console.error("Error al guardar en Sheets:", err);
             }
             
+            // Espera un momento y revalida los datos reales del backend
             setTimeout(fetchData, 2000); 
         }
 
