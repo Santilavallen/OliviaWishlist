@@ -144,32 +144,34 @@
                 const esPrimeraNecesidad = item.primera_necesidad === "SI" || item.primera_necesidad === "si" || item.primera_necesidad === true || item.primera_necesidad === "TRUE";
                 
                 const card = document.createElement('div');
-                // Anatomía: max-width 320px, padding interno de 16px (p-4), bordes redondeados y diseño equilibrado
-                card.className = `w-full max-w-[320px] mx-auto bg-white border border-[#E6E9EE] rounded-[24px] shadow-sm p-4 flex flex-col justify-between transition-all duration-300 ${isComprado ? 'card-disabled shadow-none' : 'hover:shadow-md'}`;
+                // MODIFICACIÓN: Se añade min-h-[440px] para asegurar una base homogénea y flex flex-col para controlar el empuje
+                card.className = `w-full max-w-[320px] min-h-[440px] mx-auto bg-white border border-[#E6E9EE] rounded-[24px] shadow-sm p-4 flex flex-col justify-between transition-all duration-300 ${isComprado ? 'card-disabled shadow-none' : 'hover:shadow-md'}`;
 
                 card.innerHTML = `
-                    <div class="cursor-pointer flex flex-col" onclick="${isComprado ? '' : `window.open('${item.link}', '_blank')`}">
+                    <div class="cursor-pointer flex-1 flex flex-col justify-between w-full" onclick="${isComprado ? '' : `window.open('${item.link}', '_blank')`}">
                         
-                        <div class="relative w-full h-[208px] bg-gray-50 rounded-2xl overflow-hidden flex items-center justify-center mb-4">
-                            <img src="${item.imagen_url || 'https://via.placeholder.com/300x250'}" alt="${item.titulo}" class="w-full h-full object-cover">
-                            
-                            ${esPrimeraNecesidad ? `
-                                <div class="absolute top-2 left-2 h-[28px] inline-flex items-center gap-1.5 bg-[#E8F2EA] text-[#2E7D32] px-3 rounded-full text-[14px] font-medium shadow-sm select-none">
-                                    <svg class="w-4 h-4 fill-none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                                    </svg>
-                                    <span>Indispensable</span>
-                                </div>
-                            ` : ''}
-                        </div>
+                        <div class="w-full">
+                            <div class="relative w-full h-[208px] bg-gray-50 rounded-2xl overflow-hidden flex items-center justify-center mb-4">
+                                <img src="${item.imagen_url || 'https://via.placeholder.com/300x250'}" alt="${item.titulo}" class="w-full h-full object-cover">
+                                
+                                ${esPrimeraNecesidad ? `
+                                    <div class="absolute top-2 left-2 h-[28px] inline-flex items-center gap-1.5 bg-[#E8F2EA] text-[#2E7D32] px-3 rounded-full text-[14px] font-medium shadow-sm select-none">
+                                        <svg class="w-4 h-4 fill-none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                        </svg>
+                                        <span>Indispensable</span>
+                                    </div>
+                                ` : ''}
+                            </div>
 
-                        <div class="flex flex-col mb-2">
-                            <h3 class="text-[20px] font-semibold text-[#111827] leading-[28px] tracking-tight">${item.titulo}</h3>
-                            ${item.variante ? `<p class="text-gray-500 text-[14px] font-normal leading-snug mt-0.5 mb-1">${item.variante}</p>` : ''}
+                            <div class="flex flex-col mb-4">
+                                <h3 class="text-[20px] font-semibold text-[#111827] leading-[28px] tracking-tight">${item.titulo}</h3>
+                                ${item.variante ? `<p class="text-gray-500 text-[14px] font-normal leading-snug mt-0.5">${item.variante}</p>` : ''}
+                            </div>
                         </div>
 
                         ${(item.precio && !isComprado) ? `
-                            <div class="w-full h-[44px] bg-[#F1F5F2] rounded-xl flex items-center px-4 mb-3">
+                            <div class="w-full h-[44px] bg-[#F1F5F2] rounded-xl flex items-center px-4 mb-3 mt-auto">
                                 <span class="text-[18px] font-semibold text-[#111827] tracking-tight">${formatPrice(item.precio)}</span>
                             </div>
                         ` : ''}
