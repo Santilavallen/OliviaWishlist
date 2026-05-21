@@ -67,7 +67,7 @@
 
     <main class="max-w-6xl mx-auto px-6 mb-16">
         <div id="loading" class="text-center text-gray-500 text-lg font-medium">Cargando elementos...</div>
-        <div id="cardsContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 hidden">
+        <div id="cardsContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 items-stretch hidden">
         </div>
     </main>
 
@@ -144,8 +144,8 @@
                 const esPrimeraNecesidad = item.primera_necesidad === "SI" || item.primera_necesidad === "si" || item.primera_necesidad === true || item.primera_necesidad === "TRUE";
                 
                 const card = document.createElement('div');
-                // MODIFICACIÓN: Se añade min-h-[440px] para asegurar una base homogénea y flex flex-col para controlar el empuje
-                card.className = `w-full max-w-[320px] min-h-[440px] mx-auto bg-white border border-[#E6E9EE] rounded-[24px] shadow-sm p-4 flex flex-col justify-between transition-all duration-300 ${isComprado ? 'card-disabled shadow-none' : 'hover:shadow-md'}`;
+                // MODIFICACIÓN: Eliminamos min-h fijo. Al usar h-full, la card se estira al tamaño de la más alta de su fila.
+                card.className = `w-full max-w-[320px] h-full mx-auto bg-white border border-[#E6E9EE] rounded-[24px] shadow-sm p-4 flex flex-col justify-between transition-all duration-300 ${isComprado ? 'card-disabled shadow-none' : 'hover:shadow-md'}`;
 
                 card.innerHTML = `
                     <div class="cursor-pointer flex-1 flex flex-col justify-between w-full" onclick="${isComprado ? '' : `window.open('${item.link}', '_blank')`}">
@@ -177,13 +177,13 @@
                         ` : ''}
                     </div>
                     
-                    <div class="w-full">
+                    <div class="w-full ${!item.precio || isComprado ? 'mt-auto' : ''}">
                         ${isComprado ? `
                             <div class="bg-gray-50 border border-gray-200 h-[48px] flex items-center justify-center rounded-xl text-center px-4">
                                 <p class="text-sm text-gray-500 font-medium truncate">Comprado por: <span class="text-[#111827] font-bold">${item.comprador || 'Anónimo'}</span></p>
                             </div>
                         ` : `
-                            <button onclick="markAsBought(${item.id})" class="w-full h-[48px] bg-[#4F7A5C] hover:bg-[#3d5e46] text-white font-medium text-[16px] px-5 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm shadow-[#4F7A5C]/10">
+                            <button onclick="event.stopPropagation(); markAsBought(${item.id})" class="w-full h-[48px] bg-[#4F7A5C] hover:bg-[#3d5e46] text-white font-medium text-[16px] px-5 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm shadow-[#4F7A5C]/10">
                                 <svg class="w-4 h-4 stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                                 Marcar como comprado
                             </button>
@@ -201,15 +201,23 @@
             const item = itemsData.find(i => i.id == id);
             if (item) {
                 item.comprado = true;
-                item.comprador = name;
-                renderCards();
+                item.comprador = name.trim();
+                renderCards(); 
             }
 
             try {
                 await fetch(WEB_APP_URL, {
                     method: 'POST',
                     mode: 'no-cors',
-                    body: JSON.stringify({ action: 'update', id: id, comprado: true, comprador: name })
+                    headers: {
+                        'Content-Type': 'text/plain'
+                    },
+                    body: JSON.stringify({ 
+                        action: 'update', 
+                        id: id.toString(), 
+                        comprado: true, 
+                        comprador: name.trim() 
+                    })
                 });
             } catch (err) {
                 console.error("Error al guardar en Sheets:", err);
