@@ -15,7 +15,6 @@
         .card-disabled {
             filter: grayscale(0.4);
             opacity: 0.65;
-            /* MODIFICACIÓN: Permitimos eventos de puntero para que el link responda al click */
             pointer-events: auto;
         }
     </style>
@@ -195,6 +194,13 @@
         }
 
         async function markAsBought(id) {
+            const itemValidacion = itemsData.find(i => i.id == id);
+            if (itemValidacion && (itemValidacion.comprado === true || itemValidacion.comprado === "TRUE")) {
+                alert("¡Ups! Alguien más acaba de reservar este artículo hace un momento. La tarjeta se va a actualizar.");
+                fetchData(); 
+                return;
+            }
+
             const name = prompt("Por favor, ingresa tu nombre para reservarlo:");
             if (!name || name.trim() === "") return;
 
@@ -219,11 +225,15 @@
                         comprador: name.trim() 
                     })
                 });
+                
+                alert("¡Gracias! Tu reserva fue enviada correctamente.");
+                
             } catch (err) {
                 console.error("Error al guardar en Sheets:", err);
+                alert("Hubo un problema al registrar tu compra. Por favor, intentalo de nuevo.");
             }
             
-            setTimeout(fetchData, 2000); 
+            setTimeout(fetchData, 500); 
         }
 
         fetchData();
