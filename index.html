@@ -15,7 +15,8 @@
         .card-disabled {
             filter: grayscale(0.4);
             opacity: 0.65;
-            pointer-events: none;
+            /* MODIFICACIÓN: Permitimos eventos de puntero para que el link responda al click */
+            pointer-events: auto;
         }
     </style>
 </head>
@@ -144,11 +145,10 @@
                 const esPrimeraNecesidad = item.primera_necesidad === "SI" || item.primera_necesidad === "si" || item.primera_necesidad === true || item.primera_necesidad === "TRUE";
                 
                 const card = document.createElement('div');
-                // MODIFICACIÓN: Eliminamos min-h fijo. Al usar h-full, la card se estira al tamaño de la más alta de su fila.
                 card.className = `w-full max-w-[320px] h-full mx-auto bg-white border border-[#E6E9EE] rounded-[24px] shadow-sm p-4 flex flex-col justify-between transition-all duration-300 ${isComprado ? 'card-disabled shadow-none' : 'hover:shadow-md'}`;
 
                 card.innerHTML = `
-                    <div class="cursor-pointer flex-1 flex flex-col justify-between w-full" onclick="${isComprado ? '' : `window.open('${item.link}', '_blank')`}">
+                    <div class="cursor-pointer flex-1 flex flex-col justify-between w-full" onclick="window.open('${item.link}', '_blank')">
                         
                         <div class="w-full">
                             <div class="relative w-full h-[208px] bg-gray-50 rounded-2xl overflow-hidden flex items-center justify-center mb-4">
