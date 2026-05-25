@@ -194,6 +194,7 @@
         }
 
         async function markAsBought(id) {
+            // 1. Validación local por si la página ya tenía la información en memoria
             const itemValidacion = itemsData.find(i => i.id == id);
             if (itemValidacion && (itemValidacion.comprado === true || itemValidacion.comprado === "TRUE")) {
                 alert("¡Ups! Alguien más acaba de reservar este artículo hace un momento. La tarjeta se va a actualizar.");
@@ -204,36 +205,66 @@
             const name = prompt("Por favor, ingresa tu nombre para reservarlo:");
             if (!name || name.trim() === "") return;
 
+            // Guardamos el estado anterior por si hay que revertir el cambio visual local
             const item = itemsData.find(i => i.id == id);
+            let originalComprado = false;
+            let originalComprador = "";
+            
             if (item) {
+                originalComprado = item.comprado;
+                originalComprador = item.comprador;
+                
                 item.comprado = true;
                 item.comprador = name.trim();
                 renderCards(); 
             }
 
             try {
-                await fetch(WEB_APP_URL, {
+                // Estructuramos los parámetros como formulario clásico para compatibilidad de lectura CORS
+                const deyt = {
+                    action: 'update',
+                    id: id.toString(),
+                    comprado: 'true',
+                    comprador: name.trim()
+                };
+
+                const formBody = Object.keys(deyt)
+                    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(deyt[key]))
+                    .join('&');
+
+                // 2. Petición abierta (CORS + redirect) para capturar la respuesta del servidor
+                const response = await fetch(WEB_APP_URL, {
                     method: 'POST',
-                    mode: 'no-cors',
+                    mode: 'cors',
+                    redirect: 'follow',
                     headers: {
-                        'Content-Type': 'text/plain'
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
                     },
-                    body: JSON.stringify({ 
-                        action: 'update', 
-                        id: id.toString(), 
-                        comprado: true, 
-                        comprador: name.trim() 
-                    })
+                    body: formBody
                 });
-                
-                alert("¡Gracias! Tu reserva fue enviada correctamente.");
+
+                const resultado = await response.json();
+
+                // 3. Verificamos la propiedad devuelta por el script de Google
+                if (resultado.status === "already_bought") {
+                    alert("Lo sentimos, otra persona se adelantó y reservó este regalo hace unos instantes.");
+                    if (item) {
+                        item.comprado = originalComprado;
+                        item.comprador = originalComprador;
+                    }
+                } else if (resultado.status === "success") {
+                    alert("¡Gracias! Tu reserva fue enviada correctamente.");
+                } else {
+                    alert("Hubo un aviso del sistema: " + (resultado.message || "No se pudo completar la operación."));
+                }
                 
             } catch (err) {
                 console.error("Error al guardar en Sheets:", err);
                 alert("Hubo un problema al registrar tu compra. Por favor, intentalo de nuevo.");
             }
             
-            setTimeout(fetchData, 500); 
+            // Sincronizamos la interfaz con la realidad del backend
+            fetchData(); 
         }
 
         fetchData();
